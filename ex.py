@@ -69,8 +69,9 @@ def create_dummy():
 	}
 
 
-dummy = create_dummy()
+
 
 @app.route('/biserver/api/v1.0/regions', methods=['GET'])
 def hello_world():
+	dummy = create_dummy()
     return json.dumps(dummy)
