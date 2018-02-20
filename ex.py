@@ -148,13 +148,55 @@ def stat():
 		elif a == 'region':
 			region = int(request.args.getlist(a)[0])
 
-	# selection
+	# selection prd1
+	q1 = None
+	q2 = None
+	q3 = None
+	q4 = None
+	if year1 > 0:
+		q1 = (df.y == year1)
+		if len(monthes1) > 0:
+			q2 = (df.m.isin(monthes1))
+	if mregion > 0:
+		q3 = (df.mrf_key == mregion)
 	if region > 0:
-		prd1 = df[(df.y == year1) & (df.m.isin(monthes1)) & (df.mrf_key == mregion) & (df.region_key == region)]
-		prd2 = df[(df.y == year2) & (df.m.isin(monthes2)) & (df.mrf_key == mregion) & (df.region_key == region)]
+		q4 = (df.region_key == region)
+	q = None 
+	for qq in [q1, q2, q3, q4]:
+	    if not qq is None:
+	        if q is None:
+	            q = qq
+	        else:
+	            q = q & qq
+	if not q is None:
+	    prd1 = df[q]
 	else:
-		prd1 = df[(df.y == year1) & (df.m.isin(monthes1)) & (df.mrf_key == mregion)]
-		prd2 = df[(df.y == year2) & (df.m.isin(monthes2)) & (df.mrf_key == mregion)]
+	    prd1 = df		
+	
+	# selection prd2
+	q1 = None
+	q2 = None
+	q3 = None
+	q4 = None
+	if year2 > 0:
+		q1 = (df.y == year2)
+		if len(monthes2) > 0:
+			q2 = (df.m.isin(monthes2))
+	if mregion > 0:
+		q3 = (df.mrf_key == mregion)
+	if region > 0:
+		q4 = (df.region_key == region)
+	q = None 
+	for qq in [q1, q2, q3, q4]:
+	    if not qq is None:
+	        if q is None:
+	            q = qq
+	        else:
+	            q = q & qq
+	if not q is None:
+	    prd2 = df[q]
+	else:
+	    prd2 = df		
 
 	# agregation
 	grouped1 = prd1.groupby('DRMS_id')
