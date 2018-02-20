@@ -40,7 +40,7 @@ print 'http://127.0.0.1:5000/biserver/api/v1.0/statistic?year1=2017&year2=2016&m
 
 
 @app.route('/biserver/api/v1.0/regions', methods=['GET'])
-def data():	
+def get_data():	
 	year = 0
 	monthes = []
 	products = []
@@ -61,7 +61,29 @@ def data():
 			year = int(request.args.getlist(a)[0])
 
 	# selection
-	sel = df[(df.y == year) & (df.m.isin(monthes)) & (df.ch_id.isin(chanels)) & (df.DRMS_id.isin(products))]
+	q1 = None
+	q2 = None
+	q3 = None
+	q4 = None
+	if year > 0:
+		q1 = (df.y == year)
+		if len(monthes) > 0:
+			q2 = (df.m.isin(monthes))
+	if len(products) > 0:
+		q3 = (df.DRMS_id.isin(products))
+	if len(chanels) > 0:
+		q4 = (df.ch_id.isin(chanels))
+	q = None 
+	for qq in [q1, q2, q3, q4]:
+	    if not qq is None:
+	        if q is None:
+	            q = qq
+	        else:
+	            q = q & qq
+	if not q is None:
+	    sel = df[q]
+	else:
+	    sel = df		
 
 	# regions aggregation
 	reg = sel.groupby('region_key')
