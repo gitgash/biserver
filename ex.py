@@ -1,7 +1,7 @@
 # encoding: utf-8
 from flask import Flask, request
 import json
-import random
+#import random
 import sys
 import pandas as pd
 import numpy as np
@@ -219,6 +219,7 @@ def stat():
 			'period2_fact_sum'	: row['fact_val_2']
 			}
 		)
+	h = {'values': d}
 
-	return json.dumps(d)
+	return json.dumps(h)
 
