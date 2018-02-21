@@ -30,6 +30,8 @@ xl = pd.ExcelFile("data.xlsx")
 
 # parse shit
 df = xl.parse("Лист1")
+products = xl.parse("Услуги")
+products = products.set_index('DRMS_SERVICE_id')
 
 print 'debug url for region data:'
 print 'http://127.0.0.1:5000/biserver/api/v1.0/regions?services[]=1&services[]=2&channels[]=2&channels[]=5&year=2017&months[]=3&months[]=4'
@@ -206,6 +208,7 @@ def stat():
 
 	# join periods
 	p1p2 = pd.merge(a1, a2, left_index=True, right_index=True, how='outer', suffixes=('_1', '_2'))
+	p1p2 = pd.merge(p1p2, products, left_index=True, right_index=True, how='outer')
 
 	# create return data object
 	d = []
@@ -213,6 +216,7 @@ def stat():
 		d.append(
 			{
 			'product_id'		: index,
+			'product_name'		: row['DRMS_SERVICE_NAME'],
 			'period1_plan_sum'	: row['plan_val_1'],
 			'period2_plan_sum'	: row['plan_val_2'],
 			'period1_fact_sum'	: row['fact_val_1'],
