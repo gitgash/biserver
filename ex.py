@@ -208,7 +208,7 @@ def stat():
 
 	# join periods
 	p1p2 = pd.merge(a1, a2, left_index=True, right_index=True, how='outer', suffixes=('_1', '_2'))
-	p1p2 = pd.merge(p1p2, products, left_index=True, right_index=True, how='outer')
+	p1p2 = pd.merge(p1p2, products, left_index=True, right_index=True, how='outer').fillna(0)
 
 	# create return data object
 	d = []
